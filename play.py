@@ -21,25 +21,25 @@ def mapper(val):
 
 def calculate_winner(move1, move2):
     if move1 == move2:
-        return "Hòa"
+        return "Hoa"
 
     if move1 == "rock":
         if move2 == "scissors":
-            return "Người chơi"
+            return "Nguoi choi"
         if move2 == "paper":
-            return "Máy"
+            return "May"
 
     if move1 == "paper":
         if move2 == "rock":
-            return "Người chơi"
+            return "Nguoi choi"
         if move2 == "scissors":
-            return "Máy"
+            return "May"
 
     if move1 == "scissors":
         if move2 == "paper":
-            return "Người chơi"
+            return "Nguoi choi"
         if move2 == "rock":
-            return "Máy"
+            return "May"
 
 #load model
 model = load_model("rock-paper-scissors-model.h5")
@@ -83,9 +83,9 @@ while True:
 
     # Hiển thị thông tin
     font = cv2.FONT_HERSHEY_SIMPLEX
-    cv2.putText(frame, "Người chơi chọn: " + user_move_name,
+    cv2.putText(frame, "Nguoi choi chon: " + user_move_name,
                 (50, 50), font, 1.2, (204, 0, 204), 2, cv2.LINE_AA)
-    cv2.putText(frame, "Máy chọn: " + computer_move_name,
+    cv2.putText(frame, "May chon: " + computer_move_name,
                 (750, 50), font, 1.2, (204, 0, 204), 2, cv2.LINE_AA)
     cv2.putText(frame, "Winner: " + winner,
                 (400, 600), font, 2, (255, 0, 0), 4, cv2.LINE_AA)
