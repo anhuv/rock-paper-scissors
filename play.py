@@ -3,6 +3,10 @@ import cv2
 import numpy as np
 from random import choice
 
+# Sử dụng mạng neutral nhận biết cử chỉ tay của người chơi qua webcame máy tính
+# ramdom.choice là lựa chọn của máy tính
+# nhấn phím q để quit 
+
 REV_CLASS_MAP = {
     0: "rock",
     1: "paper",
@@ -17,27 +21,27 @@ def mapper(val):
 
 def calculate_winner(move1, move2):
     if move1 == move2:
-        return "Tie"
+        return "Hòa"
 
     if move1 == "rock":
         if move2 == "scissors":
-            return "User"
+            return "Người chơi"
         if move2 == "paper":
-            return "Computer"
+            return "Máy"
 
     if move1 == "paper":
         if move2 == "rock":
-            return "User"
+            return "Người chơi"
         if move2 == "scissors":
-            return "Computer"
+            return "Máy"
 
     if move1 == "scissors":
         if move2 == "paper":
-            return "User"
+            return "Người chơi"
         if move2 == "rock":
-            return "Computer"
+            return "Máy"
 
-
+#load model
 model = load_model("rock-paper-scissors-model.h5")
 
 cap = cv2.VideoCapture(0)
@@ -52,17 +56,17 @@ while True:
     if not ret:
         continue
 
-    # rectangle for user to play
-    cv2.rectangle(frame, (100, 100), (500, 500), (255, 255, 255), 2)
-    # rectangle for computer to play
-    cv2.rectangle(frame, (800, 100), (1200, 500), (255, 255, 255), 2)
+    # vùng hiển thị của người chơi
+    cv2.rectangle(frame, (100, 100), (500, 500), (0, 255, 0), 2)
+    # vùng hiển thị của máy
+    cv2.rectangle(frame, (800, 100), (1200, 500), (0, 255, 0), 2)
 
-    # extract the region of image within the user rectangle
+    # trích xuất ảnh trong vùng hiển thị của người chơi, resize theo đầu vào của model đã train
     roi = frame[100:500, 100:500]
     img = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (227, 227))
 
-    # predict the move made
+    # dự đoán ảnh sử dụng model
     pred = model.predict(np.array([img]))
     move_code = np.argmax(pred[0])
     user_move_name = mapper(move_code)
@@ -77,14 +81,14 @@ while True:
             winner = "Waiting..."
     prev_move = user_move_name
 
-    # display the information
+    # Hiển thị thông tin
     font = cv2.FONT_HERSHEY_SIMPLEX
-    cv2.putText(frame, "Your Move: " + user_move_name,
-                (50, 50), font, 1.2, (0, 0, 0), 2, cv2.LINE_AA)
-    cv2.putText(frame, "Computer's Move: " + computer_move_name,
-                (750, 50), font, 1.2, (0, 0, 0), 2, cv2.LINE_AA)
+    cv2.putText(frame, "Người chơi chọn: " + user_move_name,
+                (50, 50), font, 1.2, (204, 0, 204), 2, cv2.LINE_AA)
+    cv2.putText(frame, "Máy chọn: " + computer_move_name,
+                (750, 50), font, 1.2, (204, 0, 204), 2, cv2.LINE_AA)
     cv2.putText(frame, "Winner: " + winner,
-                (400, 600), font, 2, (0, 0, 255), 4, cv2.LINE_AA)
+                (400, 600), font, 2, (255, 0, 0), 4, cv2.LINE_AA)
 
     if computer_move_name != "none":
         icon = cv2.imread(

@@ -60,24 +60,22 @@ for directory in os.listdir(IMG_SAVE_PATH):
         img = cv2.resize(img, (227, 227))
         dataset.append([img, directory])
 
-'''
-dataset = [
-    [[...], 'rock'],
-    [[...], 'paper'],
-    ...
-]
-'''
+
 data, labels = zip(*dataset)
 labels = list(map(mapper, labels))
 
 
 '''
-labels: rock,paper,paper,scissors,rock...
-one hot encoded: [1,0,0], [0,1,0], [0,1,0], [0,0,1], [1,0,0]...
+labels  one hot encoded
+rock   [1,0,0,0]
+paper   [0,1,0,0]
+scissors    [0,0,1,0]
+none    [0,0,0,1]
 '''
 
 # one hot encode the labels
-labels = np_utils.to_categorical(labels)
+labels = np_utils.to_categorical(labels) 
+# Chuyển về dạng onehot để sự dụng loss='categorical_crossentropy'
 
 # define the model
 model = get_model()
@@ -87,8 +85,8 @@ model.compile(
     metrics=['accuracy']
 )
 
-# start training
+# train model
 model.fit(np.array(data), np.array(labels), epochs=10)
 
-# save the model for later use
+# save the model
 model.save("rock-paper-scissors-model.h5")

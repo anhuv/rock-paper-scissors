@@ -1,13 +1,7 @@
-desc = '''Script to gather data images with a particular label.
-
-Usage: python gather_images.py <label_name> <num_samples>
-
-The script will collect <num_samples> number of images and store them
-in its own directory.
-
-Only the portion of the image within the box displayed
-will be captured and stored.
-
+desc = ''' 
+Usage: python gather_images.py <label_name> <num_samples> 
+Example: python gather_images.py paper 10
+Tạo 10 ảnh lưu vào thư mục paper
 Press 'a' to start/pause the image collecting process.
 Press 'q' to quit.
 
@@ -57,13 +51,14 @@ while True:
 
     if start:
         roi = frame[100:500, 100:500]
+        # chụp ảnh đầu vào kích thước 400x400
         save_path = os.path.join(IMG_CLASS_PATH, '{}.jpg'.format(count + 1))
         cv2.imwrite(save_path, roi)
         count += 1
 
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(frame, "Collecting {}".format(count),
-            (5, 50), font, 0.7, (0, 255, 255), 2, cv2.LINE_AA)
+            (5, 50), font, 0.7, (33, 33, 33), 2, cv2.LINE_AA)
     cv2.imshow("Collecting images", frame)
 
     k = cv2.waitKey(10)
